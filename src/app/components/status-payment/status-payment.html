@@ -1,0 +1,82 @@
+<div class="status-payment-container" [ngClass]="getStatusClass()">
+  
+  <div class="status-content">
+    
+    <!-- Ícone/Spinner -->
+    <div class="status-icon-wrapper">
+      @if (status === 'processing') {
+        <mat-spinner diameter="80"></mat-spinner>
+      } @else {
+        <mat-icon class="status-icon">{{ getStatusIcon() }}</mat-icon>
+      }
+    </div>
+
+    <!-- Título -->
+    <h2 class="status-title">{{ getStatusTitle() }}</h2>
+
+    <!-- Mensagem principal -->
+    <p class="status-message">{{ message }}</p>
+
+    <!-- Detalhes adicionais -->
+    @if (details) {
+      <p class="status-details">{{ details }}</p>
+    }
+
+    <!-- ID da transação -->
+    @if (transactionId) {
+      <div class="transaction-info">
+        <span class="transaction-label">ID da Transação:</span>
+        <code class="transaction-id">{{ transactionId }}</code>
+      </div>
+    }
+
+    <!-- Método de pagamento -->
+    @if (paymentMethod) {
+      <div class="payment-method-badge">
+        @if (paymentMethod === 'pix') {
+          <span>PIX</span>
+        }
+        @if (paymentMethod === 'credit_card') {
+          <span>Cartão de Crédito</span>
+        }
+        @if (paymentMethod === 'debit_card') {
+          <span>Cartão de Débito</span>
+        }
+      </div>
+    }
+
+    <!-- Ações -->
+    <div class="status-actions">
+      
+      <!-- Sucesso -->
+      @if (status === 'success') {
+        <button mat-flat-button color="primary" (click)="onClose()">
+          <mat-icon>check</mat-icon> Concluir
+        </button>
+        <button mat-button (click)="onNewPayment()">
+          Novo Pagamento
+        </button>
+      }
+
+      <!-- Falha -->
+      @if (status === 'failed') {
+        <button mat-flat-button color="primary" (click)="onRetry()">
+          <mat-icon>refresh</mat-icon> Tentar Novamente
+        </button>
+        <button mat-button (click)="onNewPayment()">
+          Alterar Método de Pagamento
+        </button>
+      }
+
+      <!-- Aguardando (PIX) -->
+      @if (status === 'waiting') {
+        <button mat-button (click)="onClose()">
+          <mat-icon>arrow_back</mat-icon> Voltar
+        </button>
+      }
+
+    </div>
+
+  </div>
+
+</div>

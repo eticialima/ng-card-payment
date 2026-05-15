@@ -7,8 +7,8 @@
 
 .app-main {
   flex: 1;
-  padding: 1rem;
-  max-width: 900px;
+  padding: 2rem 1rem;
+  max-width: 1000px;
   margin: 0 auto;
   width: 100%;
 
@@ -18,19 +18,52 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     animation: slideIn 0.6s ease;
+
+    ::ng-deep {
+      .mat-horizontal-stepper-header-container {
+        margin-bottom: 2rem;
+      }
+
+      .mat-step-header {
+        padding: 1rem;
+      }
+
+      .mat-horizontal-content-container {
+        padding: 0;
+      }
+    }
   }
 }
 
 .step-content {
-  padding: 2rem 0;
-  min-height: 300px;
+  padding: 1.5rem 0;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 
   h2 {
-    margin-top: 0;
+    margin: 0 0 2rem 0;
     color: #333;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 600;
     text-align: center;
+    width: 100%;
+  }
+
+  // Centralizar os componentes de pagamento
+  app-payment-method-selector,
+  app-payment-card,
+  app-payment-pix,
+  app-status-payment {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+  }
+
+  app-status-payment {
+    max-width: 700px;
   }
 }
 

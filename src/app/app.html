@@ -17,17 +17,35 @@
         <div class="step-content">
           @if (selectedPaymentMethod() === 'credit_card') {
             <h2>Cartão de Crédito</h2>
-            <app-payment-card [isDebit]="false" (back)="onBack()" />
+            <app-payment-card [isDebit]="false" (back)="onBack()" (submit)="onPaymentSubmit()" />
           }
 
           @if (selectedPaymentMethod() === 'debit_card') {
             <h2>Cartão de Débito</h2>
-            <app-payment-card [isDebit]="true" (back)="onBack()" />
+            <app-payment-card [isDebit]="true" (back)="onBack()" (submit)="onPaymentSubmit()" />
           }
 
           @if (selectedPaymentMethod() === 'pix') {
             <h2>Pagamento PIX</h2>
-            <app-payment-pix (back)="onBack()" />
+            <app-payment-pix (back)="onBack()" (pixPaid)="onPaymentSubmit()" />
+          }
+        </div>
+      </mat-step>
+
+      <!-- Passo 3: Status do Pagamento -->
+      <mat-step label="Status">
+        <div class="step-content">
+          @if (showingStatus()) {
+            <app-status-payment
+              [status]="paymentStatus()"
+              [message]="paymentMessage()"
+              [details]="paymentDetails()"
+              [transactionId]="transactionId()"
+              [paymentMethod]="selectedPaymentMethod() || undefined"
+              (retry)="onPaymentRetry()"
+              (close)="onPaymentClose()"
+              (newPayment)="onNewPayment()"
+            />
           }
         </div>
       </mat-step>

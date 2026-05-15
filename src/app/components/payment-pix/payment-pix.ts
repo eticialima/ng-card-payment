@@ -37,6 +37,7 @@ export class PaymentPix implements OnInit, OnDestroy {
   @Output() generatePix = new EventEmitter<void>();
   @Output() pixExpired = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();
+  @Output() pixPaid = new EventEmitter<void>();
 
   pixQrCode: string = '';
   pixQrCodeBase64: string = '';
@@ -265,7 +266,7 @@ export class PaymentPix implements OnInit, OnDestroy {
     Logger.log('🧪 TESTE: Simulando aprovação do PIX');
 
     this.snackBar.open('🧪 TESTE: Pagamento PIX aprovado!', 'Fechar', {
-      duration: 3000,
+      duration: 2000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: ['snackbar-success']
@@ -275,9 +276,10 @@ export class PaymentPix implements OnInit, OnDestroy {
     this.stopCountdown();
     this.pixGenerated = false;
 
-    // Aqui você pode emitir um evento para o componente pai
-    // se quiser que ele processe a "aprovação" simulada
-    // this.pixApproved.emit();
+    // Emitir evento para o componente pai processar o pagamento
+    setTimeout(() => {
+      this.pixPaid.emit();
+    }, 1000);
   }
 
   /**
