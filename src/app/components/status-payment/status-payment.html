@@ -1,15 +1,13 @@
-<div class="status-payment-container" [ngClass]="getStatusClass()">
+<div class="status-content" [ngClass]="getStatusClass()">
 
-  <div class="status-content">
-
-    <!-- Ícone/Spinner -->
-    <div class="status-icon-wrapper">
-      @if (status === 'processing') {
-        <mat-spinner diameter="80"></mat-spinner>
-      } @else {
-        <mat-icon class="status-icon">{{ getStatusIcon() }}</mat-icon>
-      }
-    </div>
+  <!-- Ícone/Spinner -->
+  <div class="status-icon-wrapper">
+    @if (status === 'processing') {
+      <mat-spinner diameter="80"></mat-spinner>
+    } @else {
+      <mat-icon class="status-icon">{{ getStatusIcon() }}</mat-icon>
+    }
+  </div>
 
     <!-- Título -->
     <h2 class="status-title">{{ getStatusTitle() }}</h2>
@@ -78,5 +76,3 @@
     </div>
 
   </div>
-
-</div>

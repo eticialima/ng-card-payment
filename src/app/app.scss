@@ -38,10 +38,6 @@
 .step-content {
   padding: 1.5rem 0;
   min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
 
   h2 {
     margin: 0 0 2rem 0;
@@ -50,20 +46,6 @@
     font-weight: 600;
     text-align: center;
     width: 100%;
-  }
-
-  // Centralizar os componentes de pagamento
-  app-payment-method-selector,
-  app-payment-card,
-  app-payment-pix,
-  app-status-payment {
-    width: 100%;
-    max-width: 600px;
-    display: block;
-  }
-
-  app-status-payment {
-    max-width: 700px;
   }
 }
 
@@ -130,13 +112,6 @@
     h2 {
       font-size: 1.4rem;
       margin-bottom: 1.5rem;
-    }
-
-    app-payment-method-selector,
-    app-payment-card,
-    app-payment-pix,
-    app-status-payment {
-      max-width: 100%;
     }
   }
 }

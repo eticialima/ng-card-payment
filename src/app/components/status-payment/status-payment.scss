@@ -1,13 +1,6 @@
 @use "variables.scss" as *;
 
-.status-payment-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  padding: 2rem;
-  animation: fadeIn 0.3s ease-in-out;
-}
+@use 'sass:color';
 
 @keyframes fadeIn {
   from {
@@ -22,8 +15,9 @@
 
 .status-content {
   text-align: center;
-  max-width: 500px;
+  max-width: 550px;
   width: 100%;
+  margin: 0 auto;
 }
 
 .status-icon-wrapper {
@@ -131,7 +125,7 @@
 // Estados específicos
 .status-processing {
   .status-icon-wrapper {
-    color: $primary-color;
+    color: $color-primary;
   }
 }
 
@@ -182,9 +176,13 @@
 
 // Responsividade
 @media (max-width: 600px) {
-  .status-payment-container {
+  :host {
     padding: 1rem;
     min-height: 300px;
+  }
+
+  .status-content {
+    max-width: 100%;
   }
 
   .status-icon-wrapper {
