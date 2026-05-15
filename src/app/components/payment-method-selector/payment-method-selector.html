@@ -1,0 +1,40 @@
+<div class="payment-method-selector">
+  <h2 class="payment-title">Escolha o método de pagamento</h2>
+  <p class="payment-subtitle">Selecione como você deseja pagar:</p>
+
+  <div class="payment-options">
+    <div
+      *ngFor="let method of paymentMethods"
+      class="payment-option"
+      [class.selected]="isSelected(method.value)"
+      [class.credit-card]="method.value === 'credit_card'"
+      [class.debit-card]="method.value === 'debit_card'"
+      (click)="selectMethod(method.value)">
+
+      <div class="option-icon" [class.icon-credit]="method.value === 'credit_card'" [class.icon-debit]="method.value === 'debit_card'">
+        <mat-icon>{{ method.icon }}</mat-icon>
+      </div>
+
+      <div class="option-content">
+        <div class="option-header">
+          <h3 class="option-title">{{ method.title }}</h3>
+          @if (method.badge) {
+            <span class="option-badge" [class.badge-installment]="method.value === 'credit_card'">{{ method.badge }}</span>
+          }
+        </div>
+        <p class="option-description">{{ method.description }}</p>
+        @if (method.details) {
+          <p class="option-details">{{ method.details }}</p>
+        }
+      </div>
+
+      <div class="option-check">
+        <div class="check-circle"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="hasError && touched">
+    Selecione um método de pagamento
+  </div>
+</div>

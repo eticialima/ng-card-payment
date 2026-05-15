@@ -1,0 +1,180 @@
+<form [formGroup]="cardForm">
+
+  <!-- Indicador de Débito -->
+  @if (isDebit) {
+  <div class="debit-indicator">
+    <mat-icon>payment</mat-icon>
+    <span>Cartão de Débito - Pagamento à Vista</span>
+  </div>
+  }
+
+  <!-- Preview do Cartão -->
+  <div class="card-container">
+    <div class="card" [ngClass]="{'flipped': cvvFocused}">
+
+      <!-- Frente do cartão -->
+      <div class="card-front card-preview">
+        <div class="card-brand" *ngIf="cardBrand">
+          <img [src]="'card-brands/' + cardBrand.toLowerCase() + '.png'"
+              [alt]="cardBrand"
+              *ngIf="cardBrand !== 'Unknown'">
+          <span *ngIf="cardBrand === 'Unknown'"><mat-icon>credit_card</mat-icon> Cartão</span>
+        </div>
+        <div class="card-number">
+          {{ cardForm.get('card_number')?.value || '**** **** **** ****' }}
+        </div>
+        <div class="card-info">
+          <div class="card-holder">
+            {{ cardForm.get('cardholder_name')?.value || 'NOME DO TITULAR' }}
+          </div>
+          <div class="card-expiry" *ngIf="cardForm.get('expiration_month')?.value && cardForm.get('expiration_year')?.value">
+            {{ cardForm.get('expiration_month')?.value }}/{{ cardForm.get('expiration_year')?.value }}
+          </div>
+          <div class="card-expiry" *ngIf="!cardForm.get('expiration_month')?.value || !cardForm.get('expiration_year')?.value">
+            MM/AA
+          </div>
+        </div>
+      </div>
+
+      <!-- Verso do cartão -->
+      <div class="card-back card-preview">
+        <div class="card-stripe"></div>
+        <div class="card-signature">
+          <div class="signature-line"></div>
+          <div class="cvv-box">
+            {{ cardForm.get('security_code')?.value || '***' }}
+          </div>
+        </div>
+        <div class="card-info-back">
+          <div *ngIf="cardBrand !== 'Unknown'" class="card-brand-back">
+            <img [src]="'card-brands/' + cardBrand.toLowerCase() + '.png'" [alt]="cardBrand">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário de Dados do Cartão -->
+  <div class="card-form-fields">
+
+    <!-- Número do Cartão -->
+    <mat-form-field class="full-width">
+      <mat-label>Número do Cartão</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="card_number"
+        (input)="formatCardNumber($event)"
+        placeholder="1234 5678 9012 3456"
+        maxlength="19">
+      <mat-icon matSuffix>credit_card</mat-icon>
+      <mat-hint *ngIf="cardBrand !== 'Unknown'">{{ cardBrand }}</mat-hint>
+      <mat-error *ngIf="cardForm.get('card_number')?.hasError('required')">
+        Número do cartão é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Nome do Titular -->
+    <mat-form-field class="full-width">
+      <mat-label>Nome do Titular</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="cardholder_name"
+        (input)="formatCardholderName($event)"
+        placeholder="NOME COMO ESTÁ NO CARTÃO">
+      <mat-icon matSuffix>person</mat-icon>
+      <mat-error *ngIf="cardForm.get('cardholder_name')?.hasError('required')">
+        Nome do titular é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Validade e CVV -->
+    <div class="card-expiry-cvv">
+      <mat-form-field class="expiry-field">
+        <mat-label>Mês</mat-label>
+        <mat-select
+          formControlName="expiration_month"
+          placeholder="MM">
+          <mat-option *ngFor="let month of months" [value]="month">
+            {{ month }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="cardForm.get('expiration_month')?.hasError('required')">
+          Obrigatório
+        </mat-error>
+        <mat-error *ngIf="cardForm.get('expiration_month')?.hasError('pattern')">
+          Mês inválido (01-12)
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="expiry-field">
+        <mat-label>Ano</mat-label>
+        <mat-select
+          formControlName="expiration_year"
+          placeholder="AAAA">
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="cardForm.get('expiration_year')?.hasError('required')">
+          Obrigatório
+        </mat-error>
+        <mat-error *ngIf="cardForm.get('expiration_year')?.hasError('pattern')">
+          Ano inválido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="cvv-field">
+        <mat-label>CVV</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="security_code"
+          (focus)="onCvvFocus()"
+          (blur)="onCvvBlur()"
+          placeholder="123"
+          maxlength="4"
+          autocomplete="cc-csc">
+        <mat-icon matSuffix>lock</mat-icon>
+        <mat-error *ngIf="cardForm.get('security_code')?.hasError('required')">
+          CVV obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Seleção de Parcelas (apenas para crédito) -->
+    @if (!isDebit) {
+    <mat-form-field class="full-width">
+      <mat-label>Parcelamento</mat-label>
+      <mat-select [(value)]="selectedInstallment" (selectionChange)="onInstallmentChange($event.value)">
+        <mat-option *ngFor="let opcao of parcelasParaMostrar" [value]="opcao.parcelas + 'x'">
+          {{ getInstallmentText(opcao) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    }
+
+  </div>
+
+  <!-- ⚠️ APENAS DESENVOLVIMENTO - Botão de teste -->
+  <div class="test-button-container" style="margin-bottom: 16px; text-align: center;" *ngIf="!isProduction()">
+    <button mat-stroked-button color="accent" type="button" (click)="preencherDadosTeste()">
+      <mat-icon>science</mat-icon> Preencher Dados de Teste (Cielo)
+    </button>
+  </div>
+
+  <!-- Botões de Ação -->
+  <div class="stepper-actions">
+    <button mat-button type="button" (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon> Voltar
+    </button>
+    <button mat-flat-button color="primary" type="button"
+            (click)="onSubmit()"
+            [disabled]="!cardForm.valid || disabled">
+      <mat-spinner *ngIf="disabled" diameter="20"></mat-spinner>
+      <span *ngIf="!disabled">Finalizar Pagamento</span>
+    </button>
+  </div>
+
+</form>

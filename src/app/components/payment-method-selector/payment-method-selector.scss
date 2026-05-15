@@ -1,0 +1,263 @@
+@use "variables.scss" as *;
+
+.payment-method-selector {
+  width: 100%;
+}
+
+.payment-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $color-black;
+  margin-bottom: 0.5rem;
+}
+
+.payment-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  border: 2px solid $color-disabled;
+  border-radius: 12px;
+  cursor: pointer;
+  background: $color-white;
+  position: relative;
+
+  &:hover {
+    border-color: $color-success;
+    box-shadow: 0 2px 8px rgba(29, 177, 0, 0.1);
+  }
+
+  // Destaque especial para crédito
+  &.credit-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+    border-color: #d0d5ff;
+
+    &:hover {
+      border-color: $color-credit;
+      box-shadow: 0 4px 12px rgba(108, 124, 214, 0.15);
+    }
+
+    &.selected {
+      border-color: $color-credit;
+      background: linear-gradient(135deg, #f0f2ff 0%, #e8ebff 100%);
+      box-shadow: 0 4px 12px rgba(108, 124, 214, 0.25);
+
+      .option-icon mat-icon {
+        color: $color-credit;
+      }
+
+      .option-title {
+        color: $color-credit;
+      }
+
+      .check-circle {
+        background: $color-credit;
+        border-color: $color-credit;
+      }
+    }
+  }
+
+  // Estilo para débito
+  &.debit-card {
+    &:hover {
+      border-color: $color-debit;
+    }
+
+    &.selected {
+      border-color: $color-debit;
+      background: #f0f7ff;
+
+      .option-icon mat-icon {
+        color: $color-debit;
+      }
+
+      .option-title {
+        color: $color-debit;
+      }
+
+      .check-circle {
+        background: $color-debit;
+        border-color: $color-debit;
+      }
+    }
+  }
+
+  &.selected {
+    border-color: $color-success;
+    background: #f1f8f4;
+    box-shadow: 0 4px 12px rgba(29, 177, 0, 0.15);
+
+    .option-icon mat-icon {
+      color: $color-success;
+    }
+
+    .option-title {
+      color: $color-success;
+    }
+
+    .check-circle {
+      background: $color-success;
+      border-color: $color-success;
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.option-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-light;
+  border-radius: 10px;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+
+  &.icon-credit {
+    background: linear-gradient(135deg, #e8ebff 0%, #d0d5ff 100%);
+  }
+
+  &.icon-debit {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  }
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.option-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $color-black;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.option-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.badge-installment {
+    background: linear-gradient(135deg, $color-credit 0%, #8b9aeb 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(108, 124, 214, 0.3);
+  }
+}
+
+.option-description {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+}
+
+.option-details {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.option-check {
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.check-circle {
+  width: 24px;
+  height: 24px;
+  border: 2px solid $color-disabled;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.error-message {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #ffebee;
+  color: $color-danger;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '⚠';
+    font-size: 1.1rem;
+  }
+}
+
+// Responsivo
+@media (max-width: 768px) {
+  .payment-title {
+    font-size: 1.25rem;
+  }
+
+  .payment-option {
+    padding: 1rem;
+  }
+
+  .option-icon {
+    width: 40px;
+    height: 40px;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .option-title {
+    font-size: 1rem;
+  }
+
+  .option-description {
+    font-size: 0.85rem;
+  }
+}

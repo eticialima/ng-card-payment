@@ -1,0 +1,67 @@
+<div class="payment-pix-container">
+
+  <!-- Loading inicial -->
+  <div class="pix-loading" *ngIf="loading && !pixGenerated">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Gerando QR Code PIX...</p>
+  </div>
+
+  <!-- QR Code e Informações -->
+  <div class="pix-qrcode-container" *ngIf="pixGenerated">
+
+    <!-- Countdown -->
+    <div class="pix-countdown">
+      <mat-icon>schedule</mat-icon>
+      <span>Expira em: <strong>{{ getFormattedTime() }}</strong></span>
+    </div>
+
+    <!-- QR Code -->
+    <div class="qrcode-wrapper">
+      <img [src]="getQrCodeUrl()" alt="QR Code PIX" class="qrcode-image">
+    </div>
+
+    <!-- Código PIX -->
+    <div class="pix-code-section">
+      <p class="pix-code-label">Ou copie o código PIX:</p>
+      <div class="pix-code-box">
+        <code class="pix-code">{{ pixQrCode }}</code>
+        <button
+          mat-icon-button
+          type="button"
+          color="primary"
+          (click)="copyPixCode()"
+          matTooltip="Copiar código PIX">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Instruções -->
+    <div class="pix-instructions">
+      <h4>Como pagar:</h4>
+      <ol>
+        <li>Abra o app do seu banco</li>
+        <li>Escolha pagar com PIX</li>
+        <li>Escaneie o QR Code ou cole o código</li>
+        <li>Confirme o pagamento</li>
+      </ol>
+    </div>
+
+    <!-- Status -->
+    <div class="pix-status">
+      <mat-spinner diameter="24"></mat-spinner>
+      <span>Aguardando pagamento...</span>
+    </div>
+
+    <!-- ⚠️ APENAS DESENVOLVIMENTO - Botão de teste -->
+    @if (!isProduction()) {
+      <div class="pix-test-button">
+        <button mat-raised-button color="warn" type="button" (click)="simulatePixApproval()">
+          🧪 TESTE: Simular Pagamento Aprovado
+        </button>
+      </div>
+    }
+
+  </div>
+
+</div>

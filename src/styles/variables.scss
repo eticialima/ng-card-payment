@@ -1,0 +1,136 @@
+/* SCSS HEX */
+$background-color: #f8f9fa; // #dfdbdb
+$main-color: #1d34ff;
+$main-dark-color: #17294b;
+$secondary-color: #1d34ff;
+
+$color-white: #FFF;
+$color-black: #202020;
+
+$color-light: #f5f5f5;
+$color-disabled: #d1d1d1;
+$color-dark: #1d2770;
+
+$color-green: #38c500;
+$color-primary: $main-color;
+$color-danger: #E63946;
+$color-orange: #d96d00;
+$color-warning: #ffbb00;
+$color-success: #1db100;
+$color-yellow: #fffb00;
+$color-alert: $color-warning;
+
+// Cores específicas para métodos de pagamento
+$color-credit: #6c7cd6; // Cartão de crédito
+$color-debit: #2196F3;  // Cartão de débito
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+$font-size-base: 1rem;
+$font-size-small: 0.875rem;
+$font-size-large: 1.25rem;
+
+// Spacing
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+// Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
+
+// Card Brand Colors
+$visa-color: #1434cb;
+$mastercard-color: #eb001b;
+$amex-color: #006fcf;
+$elo-color: #ffcb05;
+$hipercard-color: #cc092f;
+$discover-color: #ff6000;
+$diners-color: #0079be;
+$jcb-color: #0e4c96;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-style {
+  background: $background-card;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-md;
+}
+
+@mixin input-style {
+  padding: $spacing-md;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-md;
+  font-size: $font-size-base;
+  transition: all $transition-normal;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+}
+
+@mixin button-style {
+  padding: $spacing-md $spacing-lg;
+  border: none;
+  border-radius: $border-radius-md;
+  font-size: $font-size-base;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-normal;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) { @content; }
+  } @else if $breakpoint == tablet {
+    @media (max-width: $breakpoint-tablet) { @content; }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $breakpoint-desktop) { @content; }
+  }
+}

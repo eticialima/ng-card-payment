@@ -1,0 +1,39 @@
+<div class="app-container">
+
+  <main class="app-main">
+    <mat-stepper linear #stepper>
+      <!-- Passo 1: Seleção do Método -->
+      <mat-step label="Escolha o método de pagamento">
+        <div class="step-content">
+          <app-payment-method-selector
+            [selectedMethod]="selectedPaymentMethod()"
+            (methodSelected)="onMethodSelected($event)"
+          />
+        </div>
+      </mat-step>
+
+      <!-- Passo 2: Preenchimento dos Dados -->
+      <mat-step label="Dados de pagamento">
+        <div class="step-content">
+          @if (selectedPaymentMethod() === 'credit_card') {
+            <h2>Cartão de Crédito</h2>
+            <app-payment-card [isDebit]="false" />
+          }
+
+          @if (selectedPaymentMethod() === 'debit_card') {
+            <h2>Cartão de Débito</h2>
+            <app-payment-card [isDebit]="true" />
+          }
+
+          @if (selectedPaymentMethod() === 'pix') {
+            <h2>Pagamento PIX</h2>
+            <app-payment-pix />
+          }
+        </div>
+        <div class="step-actions">
+          <button mat-button matStepperPrevious>Voltar</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </main>
+</div>
