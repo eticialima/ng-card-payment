@@ -1,7 +1,7 @@
 <div class="status-payment-container" [ngClass]="getStatusClass()">
-  
+
   <div class="status-content">
-    
+
     <!-- Ícone/Spinner -->
     <div class="status-icon-wrapper">
       @if (status === 'processing') {
@@ -47,7 +47,7 @@
 
     <!-- Ações -->
     <div class="status-actions">
-      
+
       <!-- Sucesso -->
       @if (status === 'success') {
         <button mat-flat-button color="primary" (click)="onClose()">

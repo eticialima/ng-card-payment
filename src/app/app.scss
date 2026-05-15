@@ -109,11 +109,34 @@
 
     mat-stepper {
       padding: 1rem;
+      border-radius: 12px;
+
+      ::ng-deep {
+        .mat-horizontal-stepper-header-container {
+          margin-bottom: 1rem;
+        }
+
+        .mat-step-header {
+          padding: 0.5rem;
+        }
+      }
     }
   }
 
   .step-content {
     padding: 1rem 0;
-    min-height: 200px;
+    min-height: 300px;
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    app-payment-method-selector,
+    app-payment-card,
+    app-payment-pix,
+    app-status-payment {
+      max-width: 100%;
+    }
   }
 }
