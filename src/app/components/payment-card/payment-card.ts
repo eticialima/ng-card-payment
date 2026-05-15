@@ -72,9 +72,9 @@ export class PaymentCard implements OnInit, OnChanges {
   years: string[] = [];
 
   constructor(private fb: FormBuilder, private paymentService: PaymentService) {
-    // Gerar anos para o select (atual + 15 anos)
+    // Gerar anos para o select (3 anos atrás até 15 anos à frente)
     const currentYear = new Date().getFullYear();
-    for (let i = 0; i < 15; i++) {
+    for (let i = -3; i < 15; i++) {
       this.years.push((currentYear + i).toString());
     }
 
@@ -174,7 +174,7 @@ export class PaymentCard implements OnInit, OnChanges {
   private yearValidator(control: any): { [key: string]: any } | null {
     const currentYear = new Date().getFullYear();
     const year = parseInt(control.value);
-    if (isNaN(year) || year < currentYear || year > currentYear + 20) {
+    if (isNaN(year) || year < currentYear - 3 || year > currentYear + 20) {
       return { 'invalidYear': true };
     }
     return null;
@@ -688,16 +688,33 @@ export class PaymentCard implements OnInit, OnChanges {
       resultado: testCard.result
     });
 
-    // Extrair mês e ano da validade (formato: MM/YYYY)
+    // Extrair mês e ano da validade (formato: MM/YY)
     const [month, year] = testCard.expiration.split('/');
+
+    // Converter ano de 2 dígitos para 4 dígitos (25 -> 2025, 26 -> 2026)
+    const yearFourDigits = year.length === 2 ? '20' + year : year;
+
+    Logger.log('📝 Preenchendo cartão de teste:', {
+      month,
+      year,
+      yearFourDigits,
+      yearsAvailable: this.years,
+      yearInList: this.years.includes(yearFourDigits)
+    });
 
     // Preencher formulário
     this.cardForm.patchValue({
       card_number: testCard.number,
       cardholder_name: testCard.holder,
       expiration_month: month,
-      expiration_year: year,
+      expiration_year: yearFourDigits,
       security_code: testCard.cvv
+    });
+
+    // Marcar campos como touched para forçar validação
+    Object.keys(this.cardForm.controls).forEach(key => {
+      this.cardForm.get(key)?.markAsTouched();
+      this.cardForm.get(key)?.updateValueAndValidity();
     });
 
     // Atualizar bandeira
@@ -705,6 +722,14 @@ export class PaymentCard implements OnInit, OnChanges {
 
     // Emitir mudanças
     this.emitCardData();
+
+    // Verificar valores do formulário após preenchimento
+    Logger.log('✅ Formulário preenchido:', {
+      month: this.cardForm.get('expiration_month')?.value,
+      year: this.cardForm.get('expiration_year')?.value,
+      formValid: this.cardForm.valid,
+      yearErrors: this.cardForm.get('expiration_year')?.errors
+    });
 
     // Log informativo para o usuário
     console.log(`

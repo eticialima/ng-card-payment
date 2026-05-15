@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,7 +49,8 @@ export class PaymentPix implements OnInit, OnDestroy {
 
   constructor(
     private qrcodeService: QRCodeService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +79,9 @@ export class PaymentPix implements OnInit, OnDestroy {
       this.pixExpirationTime = this.qrcodeService.getDefaultExpirationTime();
       this.pixGenerated = true;
       this.loading = false;
+
+      // Forçar detecção de mudanças
+      this.cdr.detectChanges();
 
       this.startCountdown();
 
@@ -208,7 +212,7 @@ export class PaymentPix implements OnInit, OnDestroy {
   getFormattedTime(): string {
     const minutes = Math.ceil(this.pixExpirationTime / 60);
     const seconds = this.pixExpirationTime % 60;
-    
+
     if (minutes > 0) {
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
@@ -238,5 +242,48 @@ export class PaymentPix implements OnInit, OnDestroy {
     this.pixExpirationTime = 0;
     this.pixGenerated = false;
     this.loading = false;
+  }
+
+  /**
+   * Verifica se está em ambiente de produção
+   * @returns true se produção, false se desenvolvimento
+   */
+  isProduction(): boolean {
+    return environment.production;
+  }
+
+  /**
+   * ⚠️ APENAS DESENVOLVIMENTO - Simula aprovação do pagamento PIX
+   * Usado para testar o fluxo sem precisar fazer pagamento real
+   */
+  simulatePixApproval(): void {
+    if (environment.production) {
+      Logger.warn('Simulação não disponível em produção');
+      return;
+    }
+
+    Logger.log('🧪 TESTE: Simulando aprovação do PIX');
+
+    this.snackBar.open('🧪 TESTE: Pagamento PIX aprovado!', 'Fechar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['snackbar-success']
+    });
+
+    // Parar countdown e limpar PIX
+    this.stopCountdown();
+    this.pixGenerated = false;
+
+    // Aqui você pode emitir um evento para o componente pai
+    // se quiser que ele processe a "aprovação" simulada
+    // this.pixApproved.emit();
+  }
+
+  /**
+   * Método para voltar ao passo anterior
+   */
+  onBack(): void {
+    this.back.emit();
   }
 }

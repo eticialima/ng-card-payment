@@ -33,4 +33,8 @@ export class App {
   canProceed(): boolean {
     return this.selectedPaymentMethod() !== null;
   }
+
+  onBack(): void {
+    this.stepper?.previous();
+  }
 }

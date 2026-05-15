@@ -69,11 +69,23 @@ const testCards: TestCard[] = [
 ];
 
 export function getRandomTestCard(paymentMethod?: string): TestCard {
+  // Filtrar cartões por tipo e excluir expirados
+  let availableCards = testCards;
+
   if (paymentMethod) {
-    const filtered = testCards.filter(card => card.type === paymentMethod);
-    if (filtered.length > 0) {
-      return filtered[Math.floor(Math.random() * filtered.length)];
-    }
+    availableCards = availableCards.filter(card => card.type === paymentMethod);
   }
-  return testCards[Math.floor(Math.random() * testCards.length)];
+
+  // Excluir cartões com resultado EXPIRED ou DECLINED para testes de preenchimento
+  availableCards = availableCards.filter(card => card.result === 'SUCCESS');
+
+  if (availableCards.length > 0) {
+    return availableCards[Math.floor(Math.random() * availableCards.length)];
+  }
+
+  // Fallback: retornar qualquer cartão válido
+  const successCards = testCards.filter(card => card.result === 'SUCCESS');
+  return successCards.length > 0
+    ? successCards[Math.floor(Math.random() * successCards.length)]
+    : testCards[0];
 }
