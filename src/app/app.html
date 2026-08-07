@@ -3,7 +3,10 @@
   <main class="app-main">
     <mat-stepper linear #stepper>
       <!-- Passo 1: Seleção do Método -->
-      <mat-step label="Escolha o método de pagamento">
+      <mat-step
+        label="Escolha o método de pagamento"
+        [completed]="canProceed()"
+      >
         <div class="step-content">
           <app-payment-method-selector
             [selectedMethod]="selectedPaymentMethod()"
@@ -13,7 +16,11 @@
       </mat-step>
 
       <!-- Passo 2: Preenchimento dos Dados -->
-      <mat-step label="Dados de pagamento">
+      <mat-step
+        label="Dados de pagamento"
+        [completed]="showingStatus()"
+        [editable]="canProceed()"
+      >
         <div class="step-content">
           @if (selectedPaymentMethod() === 'credit_card') {
             <h2>Cartão de Crédito</h2>
@@ -33,7 +40,10 @@
       </mat-step>
 
       <!-- Passo 3: Status do Pagamento -->
-      <mat-step label="Status">
+      <mat-step
+        label="Status"
+        [editable]="showingStatus()"
+      >
         <div class="step-content">
           @if (showingStatus()) {
             <app-status-payment
